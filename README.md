@@ -72,6 +72,19 @@ Nest is an MIT-licensed open source project. It can grow thanks to the sponsors 
 
 Nest is [MIT licensed](LICENSE).
 
+## 创建文件
+
+```bash
+nest g [文件类型] [文件名] [文件目录（src目录下）]
+```
+
+- 生成CURD
+  - `nest g resource user modules`
+- 生成单个文件
+  - controller.ts `nest g co user`
+  - module.ts `nest g mo user`
+  - service.ts `nest g s user`
+
 ## 小记
 
 - 安装 nestjs
@@ -85,3 +98,26 @@ Nest is [MIT licensed](LICENSE).
   - `pnpm install @types/express-session -D`
 - 安装图形校验码
   - `pnpm install svg-captcha`
+- 安装 typeOrm
+  - `pnpm install --save @nestjs/typeorm typeorm mysql2`
+- 安装 @nestjs/config
+  - `pnpm install @nestjs/config`
+- 安装 lodash
+  - `pnpm install lodash`
+- 安装 @nestjs/swagger
+  - `pnpm install @nestjs/swagger`
+- 安装日志打印相关
+  - `pnpm install chalk@4 log4js moment stacktrace-js`
+- 安装校验
+  - `pnpm install class-transformer class-validator`
+- 安装@nestjs/sequelize
+  - `pnpm i @nestjs/sequelize`
+  - `pnpm i sequelize-typescript`
+- 安装登录鉴权
+  - `pnpm install @nestjs/passport passport-jwt @nestjs/jwt`
+- redis配置
+  - `pnpm i ioredis`
+- 密码哈希
+  - `pnpm install bcrypt`
+- 客户端真实IP
+  - `pnpm i request-ip`

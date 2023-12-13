@@ -1,13 +1,35 @@
+/**
+ * 应用程序的根模块
+ */
 import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
-import { DemoController } from './demo/demo.controller';
-import { DemoModule } from './demo/demo.module';
-import { UserModule } from './user/user.module';
+import { ConfigModule, ConfigService } from '@nestjs/config';
+import { SequelizeModule } from '@nestjs/sequelize';
+
+import { AuthModule } from './modules/auth/auth.module';
+import { UserModule } from './modules/user/user.module';
+
+import AppConfig from './config/configuration'; // 全局配置
+import DatabaseConfig from './config/database'; // 数据库配置
+import RedisConfig from './config/redis'; // redis配置
 
 @Module({
-  imports: [DemoModule, UserModule],
-  controllers: [AppController, DemoController],
-  providers: [AppService],
+  imports: [
+    // 全局配置 Module
+    ConfigModule.forRoot({
+      envFilePath: '.development.env',
+      isGlobal: true,
+      load: [AppConfig, DatabaseConfig, RedisConfig],
+    }),
+    SequelizeModule.forRootAsync({
+      imports: [ConfigModule],
+      // 注入 database 配置
+      useFactory: async (configService: ConfigService) => {
+        return configService.get('database');
+      },
+      inject: [ConfigService],
+    }),
+    AuthModule,
+    UserModule,
+  ],
 })
 export class AppModule {}
