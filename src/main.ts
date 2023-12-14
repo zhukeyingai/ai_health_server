@@ -5,7 +5,7 @@ import * as session from 'express-session';
 import { join } from 'path';
 
 import AppConfig from './config/configuration';
-import type { Response } from './utils/types/response';
+import type { Response } from './utils/constant/response';
 import { AllExceptionsFilter } from './filter/any-exception.filter'; // 任意异常捕获
 import { HttpExceptionFilter } from './filter/http-exception.filter'; // http 异常过滤器
 import { HttpReqTransformInterceptor } from './interceptor/http-req.interceptor'; // 全局响应拦截器

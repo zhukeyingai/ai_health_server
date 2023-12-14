@@ -3,7 +3,7 @@
  */
 import { ApiProperty } from '@nestjs/swagger';
 
-import type { PageResponse } from '@/utils/types/response';
+import type { PageResponse } from '@/utils/constant/response';
 
 // 统一响应体 Dto
 export class ResponseDto {

@@ -7,8 +7,8 @@ import {
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
-import { responseMessage } from '@/utils/common'; // 全局工具函数
-import type { Response } from '@/utils/types/response';
+import { responseMessage } from '@/utils/constant/response';
+import type { Response } from '@/utils/constant/response';
 
 @Injectable()
 export class HttpReqTransformInterceptor<T>

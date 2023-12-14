@@ -114,7 +114,7 @@ nest g [文件类型] [文件名] [文件目录（src目录下）]
   - `pnpm i @nestjs/sequelize`
   - `pnpm i sequelize-typescript`
 - 安装登录鉴权
-  - `pnpm install @nestjs/passport passport-jwt @nestjs/jwt`
+  - `pnpm install @nestjs/passport passport-jwt passport @nestjs/jwt jsonwebtoken`
 - redis配置
   - `pnpm i ioredis`
 - 密码哈希

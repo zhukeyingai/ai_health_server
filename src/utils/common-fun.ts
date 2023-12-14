@@ -3,18 +3,6 @@
  */
 import * as fs from 'fs';
 
-import { REQUEST_CODE, REQUEST_MSG } from '@/utils/enums/request';
-import { Response } from '@/utils/types/response';
-
-// 统一返回体
-export const responseMessage = <T = any>(
-  data,
-  msg: string = REQUEST_MSG.SUCCESS,
-  code: number = REQUEST_CODE.SUCCESS,
-): Response<T> => {
-  return { data, msg, code };
-};
-
 /**
  * 将数组转成树形数据
  * @param {any} resource: 源数据

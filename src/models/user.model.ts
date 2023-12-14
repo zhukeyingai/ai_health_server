@@ -16,8 +16,8 @@ import {
   IsIP,
 } from 'sequelize-typescript';
 
-import { UserAttributes } from '@/utils/types/user';
-import type { Sex } from '@/utils/types';
+import { UserAttributes } from '@/utils/constant/user';
+import type { Sex } from '@/utils/constant/user';
 
 @Table({ tableName: 'user' })
 export class User

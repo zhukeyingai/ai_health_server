@@ -1,4 +1,14 @@
-import type { Times, Sex } from '.';
+import type { Times, EnumValues } from '.';
+
+// 性别
+export enum SEX {
+  FEMALE = '0', // 女
+  MALE = '1', // 男
+  PRIVACY = '2', // 隐私
+}
+
+// 性别
+export type Sex = EnumValues<typeof SEX>;
 
 // user Attributes
 export type UserAttributes = {

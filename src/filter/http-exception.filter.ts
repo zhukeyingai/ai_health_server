@@ -9,7 +9,7 @@ import {
 } from '@nestjs/common';
 import { Request, Response } from 'express';
 
-import { responseMessage } from '@/utils/common';
+import { responseMessage } from '@/utils/constant/response';
 import { Logger } from '@/utils/log4js'; // 打印日志
 
 // @Catch() 装饰器绑定所需的元数据到异常过滤器上，它告诉 Nest 这个特定的过滤器正在寻找

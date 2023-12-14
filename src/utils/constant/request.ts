@@ -1,3 +1,6 @@
+import { createParamDecorator, ExecutionContext } from '@nestjs/common';
+import * as requestIp from 'request-ip';
+
 // 请求状态码
 export enum REQUEST_CODE {
   NO_SUCCESS = -1, // 表示请求成功，但操作未成功
@@ -13,3 +16,12 @@ export enum REQUEST_MSG {
   SUCCESS = '操作成功',
   FAILURE = '操作失败',
 }
+
+// 获取客户端真实IP
+export const IpAddress = createParamDecorator(
+  (data: unknown, ctx: ExecutionContext) => {
+    const req = ctx.switchToHttp().getRequest();
+    if (req.clientIp) return req.clientIp;
+    return requestIp.getClientIp(req);
+  },
+);

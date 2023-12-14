@@ -1,27 +1,49 @@
-import { Controller, Post, Body } from '@nestjs/common';
-import { ApiTags } from '@nestjs/swagger';
+import { Controller, Post, Delete, Body, Get, Query } from '@nestjs/common';
+import { ApiTags, ApiOperation, ApiBody, ApiOkResponse } from '@nestjs/swagger';
 
 import { AuthService } from './auth.service';
+import { AuthDto } from './dto/auth.dto';
 
 @ApiTags('登录注册')
 @Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
-  @Post('findOne')
-  async findOne(@Body() body: any) {
-    const user = await this.authService.findOne(body.email);
-    console.log('@user', user);
-    if (!user) {
-      console.log('yes, I really can not do it');
-    }
-    return user;
+  // 注册
+  @ApiOperation({ summary: '用户注册' })
+  @ApiBody({ type: AuthDto })
+  @ApiOkResponse({ type: AuthDto })
+  @Post('register')
+  async register(@Body() authDto: AuthDto) {
+    const response = await this.authService.register(authDto);
+    return response;
   }
 
-  @Post('create')
-  async create(@Body() body: any) {
-    const { email, password } = body;
-    const user = await this.authService.create(email, password);
-    return user;
+  // 登录
+  @ApiOperation({ summary: '用户登录' })
+  @ApiBody({ type: AuthDto })
+  @ApiOkResponse({ type: AuthDto })
+  @Post('login')
+  async login(@Body() authDto: AuthDto) {
+    const response = await this.authService.login(authDto);
+    return response;
+  }
+
+  // 退出登录
+  @ApiOperation({ summary: '退出登录' })
+  @Get('logout')
+  async logout(@Query() query) {
+    const { user_id } = query;
+    const response = await this.authService.logout(user_id);
+    return response;
+  }
+
+  // 注销用户
+  @ApiOperation({ summary: '用户注销' })
+  @Delete('deleteUser')
+  async deleteUser(@Body() body) {
+    const { user_id } = body;
+    const response = await this.authService.deleteUser(user_id);
+    return response;
   }
 }

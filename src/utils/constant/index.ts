@@ -1,4 +1,3 @@
-import { SEX } from '../enums';
 import type { UserAttributes } from './user';
 
 // 获取枚举的所有 key
@@ -12,9 +11,6 @@ export type Times = {
   created_time?: Date; // 创建时间
   updated_time?: Date; // 最后一次更新时间
 };
-
-// 性别
-export type Sex = EnumValues<typeof SEX>;
 
 // Session 存储对象
 export type SessionTypes = {
