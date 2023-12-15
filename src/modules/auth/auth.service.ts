@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 // import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
@@ -28,11 +28,7 @@ export class AuthService {
     // 检查电子邮件是否已经存在
     const oldUser = await this.userModel.findOne({ where: { email } });
     if (oldUser) {
-      return responseMessage(
-        false,
-        '注册失败，您已注册！',
-        REQUEST_CODE.BAD_REQUEST,
-      );
+      throw new HttpException('注册失败，您已注册！', HttpStatus.BAD_REQUEST);
     }
     const user = new User();
     user.email = email;
@@ -45,7 +41,7 @@ export class AuthService {
     user.age = 18; // 默认 18 岁
     user.sex = SEX.PRIVACY; // 默认隐私
     await user.save();
-    return responseMessage(user, '注册成功！');
+    return responseMessage(true, '注册成功！', REQUEST_CODE.POST_SUCCESS);
   }
 
   // 登录
@@ -54,20 +50,12 @@ export class AuthService {
     // 检查用户是否存在
     const user = await this.userModel.findOne({ where: { email } });
     if (!user) {
-      return responseMessage(
-        false,
-        '登录失败，您还未注册！',
-        REQUEST_CODE.BAD_REQUEST,
-      );
+      throw new HttpException('登录失败，您还未注册！', HttpStatus.BAD_REQUEST);
     }
     // 验证密码
     const isPasswordMatching = await bcrypt.compare(password, user.password);
     if (!isPasswordMatching) {
-      return responseMessage(
-        false,
-        '登录失败，密码错误！',
-        REQUEST_CODE.NOT_FOUND,
-      );
+      throw new HttpException('登录失败，密码错误！', HttpStatus.BAD_REQUEST);
     }
     user.login_num += 1; // 更新用户的登录次数
 
@@ -102,7 +90,7 @@ export class AuthService {
     user.login_last_time = currentLoginTime;
 
     await user.save();
-    return responseMessage(user, '登录成功！');
+    return responseMessage(user, '登录成功！', REQUEST_CODE.POST_SUCCESS);
   }
 
   // 退出登录
@@ -110,7 +98,7 @@ export class AuthService {
     // 检查用户是否存在
     const user = await this.userModel.findOne({ where: { user_id } });
     if (!user) {
-      return responseMessage(false, '用户不存在', REQUEST_CODE.NOT_FOUND);
+      throw new HttpException('用户不存在', HttpStatus.NOT_FOUND);
     }
     user.token = null;
     await user.save();
@@ -122,7 +110,7 @@ export class AuthService {
     // 检查用户是否存在
     const user = await this.userModel.findOne({ where: { user_id } });
     if (!user) {
-      return responseMessage(false, '用户不存在', REQUEST_CODE.NOT_FOUND);
+      throw new HttpException('用户不存在', HttpStatus.NOT_FOUND);
     }
     await user.destroy();
     return responseMessage(true);

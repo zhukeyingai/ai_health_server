@@ -1,4 +1,4 @@
-import { Controller, Post, Delete, Body, Get, Query } from '@nestjs/common';
+import { Controller, Post, Body, Get, Query, Response } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiBody, ApiOkResponse } from '@nestjs/swagger';
 
 import { AuthService } from './auth.service';
@@ -40,7 +40,7 @@ export class AuthController {
 
   // 注销用户
   @ApiOperation({ summary: '用户注销' })
-  @Delete('deleteUser')
+  @Post('deleteUser')
   async deleteUser(@Body() body) {
     const { user_id } = body;
     const response = await this.authService.deleteUser(user_id);
