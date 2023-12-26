@@ -1,9 +1,8 @@
-import { Controller, Get, Query } from '@nestjs/common';
-import { ApiTags, ApiOperation, ApiBody, ApiOkResponse } from '@nestjs/swagger';
+import { Body, Controller, Get, Query, Patch } from '@nestjs/common';
+import { ApiTags, ApiOperation } from '@nestjs/swagger';
 
 import { UserService } from './user.service';
-import { CreateUserDto } from './dto/create-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
+import { UpdatePasswordDto, UpdateUserInfoDto } from './dto/user.dto';
 
 @ApiTags('个人中心')
 @Controller('user')
@@ -13,34 +12,25 @@ export class UserController {
   // 获取用户信息
   @ApiOperation({ summary: '获取用户信息' })
   @Get('getUserInfo')
-  async logout(@Query() query) {
+  async getUserInfo(@Query() query) {
     const { user_id } = query;
     const response = await this.userService.getUserInfo(user_id);
     return response;
   }
 
-  // @Post()
-  // create(@Body() createUserDto: CreateUserDto) {
-  //   return this.userService.create(createUserDto);
-  // }
+  // 更新密码
+  @ApiOperation({ summary: '更新密码' })
+  @Patch('updatePassword')
+  async updatePassword(@Body() updatePasswordDto: UpdatePasswordDto) {
+    const response = await this.userService.updatePassword(updatePasswordDto);
+    return response;
+  }
 
-  // @Get()
-  // findAll() {
-  //   return this.userService.findAll();
-  // }
-
-  // @Get(':id')
-  // findOne(@Param('id') id: string) {
-  //   return this.userService.findOne(+id);
-  // }
-
-  // @Patch(':id')
-  // update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
-  //   return this.userService.update(+id, updateUserDto);
-  // }
-
-  // @Delete(':id')
-  // remove(@Param('id') id: string) {
-  //   return this.userService.remove(+id);
-  // }
+  // 更新用户信息
+  @ApiOperation({ summary: '更新用户信息' })
+  @Patch('updateUserInfo')
+  async updateUserInfo(@Body() updateUserInfoDto: UpdateUserInfoDto) {
+    const response = await this.userService.updateUserInfo(updateUserInfoDto);
+    return response;
+  }
 }

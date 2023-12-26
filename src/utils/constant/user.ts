@@ -4,13 +4,12 @@ import type { Times, EnumValues } from '.';
 export enum SEX {
   FEMALE = '0', // 女
   MALE = '1', // 男
-  PRIVACY = '2', // 隐私
 }
 
 // 性别
 export type Sex = EnumValues<typeof SEX>;
 
-// user Attributes
+// user
 export type UserAttributes = {
   user_id: string; // 用户id
   user_name: string; // 用户名称
@@ -23,7 +22,7 @@ export type UserAttributes = {
   avatar_url?: string; // 用户头像
   sex: Sex; // 用户性别
   job?: string; // 职业
-  address?: string; // 详细地址
+  address?: string[]; // 地址
   token?: string; // 用户令牌
   login_num: number; // 登录次数
   login_last_ip?: string; // 最后一次登录ip
