@@ -1,6 +1,8 @@
 import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import * as bcrypt from 'bcrypt';
+import * as fs from 'fs';
+import * as path from 'path';
 
 import { User } from '@/models/user.model';
 import { responseMessage } from '@/utils/constant/response';
@@ -13,6 +15,15 @@ export class UserService {
     @InjectModel(User)
     private userModel: typeof User,
   ) {}
+
+  private readonly AVATAR_UPLOAD_DIR = path.join(
+    __dirname,
+    '..',
+    '..',
+    '..',
+    'upload',
+    'avatar',
+  );
 
   // 获取用户信息
   async getUserInfo(user_id: string): Promise<ResponseResult> {
@@ -78,5 +89,27 @@ export class UserService {
     } else {
       return responseMessage(null, '用户信息未发生改变，无需更新');
     }
+  }
+
+  // 上传用户头像
+  async uploadAvatar(avatarFile: Express.Multer.File): Promise<ResponseResult> {
+    if (!avatarFile) {
+      throw new HttpException('未上传头像文件', HttpStatus.NOT_FOUND);
+    }
+    if (!fs.existsSync(this.AVATAR_UPLOAD_DIR)) {
+      fs.mkdirSync(this.AVATAR_UPLOAD_DIR, { recursive: true });
+    }
+    // 生成新的文件名（避免重名）
+    const fileName = `${Date.now()}-${avatarFile.originalname}`;
+    // 存储图片到服务器
+    const filePath = path.join(this.AVATAR_UPLOAD_DIR, fileName);
+    fs.writeFileSync(filePath, avatarFile.buffer);
+    // 更新用户头像 URL
+    const fileUrl = `http://localhost:${process.env.APP_PROT}/static/avatar/${fileName}`;
+    const file = {
+      name: fileName,
+      url: fileUrl,
+    };
+    return responseMessage(file, '头像已成功上传');
   }
 }

@@ -121,3 +121,5 @@ nest g [文件类型] [文件名] [文件目录（src目录下）]
   - `pnpm install bcrypt`
 - 客户端真实IP
   - `pnpm i request-ip`
+- 文件上传
+  - `pnpm i multer @types/multer`

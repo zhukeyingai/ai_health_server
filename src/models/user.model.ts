@@ -11,6 +11,7 @@ import {
   Max,
   IsEmail,
   IsDate,
+  IsUrl,
   IsIn,
   IsIP,
 } from 'sequelize-typescript';
@@ -103,8 +104,9 @@ export class User
   weight: number;
 
   // 用户头像
+  @IsUrl
   @Column({
-    type: DataType.BLOB,
+    type: DataType.STRING,
     allowNull: true,
     comment: '用户头像',
   })

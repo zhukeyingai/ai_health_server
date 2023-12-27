@@ -1,5 +1,15 @@
-import { Body, Controller, Get, Query, Patch } from '@nestjs/common';
-import { ApiTags, ApiOperation } from '@nestjs/swagger';
+import {
+  Body,
+  Controller,
+  Get,
+  Query,
+  Patch,
+  Post,
+  UseInterceptors,
+  UploadedFile,
+} from '@nestjs/common';
+import { ApiTags, ApiOperation, ApiConsumes } from '@nestjs/swagger';
+import { FileInterceptor } from '@nestjs/platform-express';
 
 import { UserService } from './user.service';
 import { UpdatePasswordDto, UpdateUserInfoDto } from './dto/user.dto';
@@ -31,6 +41,16 @@ export class UserController {
   @Patch('updateUserInfo')
   async updateUserInfo(@Body() updateUserInfoDto: UpdateUserInfoDto) {
     const response = await this.userService.updateUserInfo(updateUserInfoDto);
+    return response;
+  }
+
+  // 上传用户头像
+  @ApiOperation({ summary: '上传用户头像' })
+  @ApiConsumes('multipart/form-data')
+  @Post('uploadAvatar')
+  @UseInterceptors(FileInterceptor('avatar'))
+  async uploadAvatar(@UploadedFile() avatarFile: Express.Multer.File) {
+    const response = await this.userService.uploadAvatar(avatarFile);
     return response;
   }
 }
