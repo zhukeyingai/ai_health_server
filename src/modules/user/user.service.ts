@@ -76,10 +76,10 @@ export class UserService {
     let isUpdated = false;
     Object.entries(updateFields).forEach(([key, value]) => {
       if (value && String(value) !== String(user[key])) {
-        if (key === 'address' && Array.isArray(value)) {
-          value = JSON.stringify(value); // 将地址数组转换为JSON字符串
-        }
-        user[key] = value;
+        user[key] =
+          key === 'address' && Array.isArray(value)
+            ? JSON.stringify(value)
+            : value;
         isUpdated = true;
       }
     });
