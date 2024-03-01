@@ -11,7 +11,6 @@ import {
   Max,
   IsEmail,
   IsDate,
-  IsUrl,
   IsIn,
   IsIP,
 } from 'sequelize-typescript';
@@ -104,23 +103,23 @@ export class User
   weight: number;
 
   // 用户头像
-  @IsUrl
   @Column({
-    type: DataType.STRING(200),
+    type: DataType.STRING,
+    allowNull: true,
     comment: '用户头像',
   })
   avatar_url?: string;
 
   // 用户性别
   @IsIn({
-    args: [['0', '1', '2']],
+    args: [['0', '1']],
     msg: '用户性别: sex 字段值错误',
   })
   @Column({
     type: DataType.ENUM,
-    values: ['0', '1', '2'],
+    values: ['0', '1'],
     allowNull: false,
-    comment: '用户性别(0:女,1:男,2:隐私)',
+    comment: '用户性别(0:女,1:男)',
   })
   sex: Sex;
 
@@ -132,13 +131,13 @@ export class User
   })
   job?: string;
 
-  // 详细地址
+  // 地址
   @Column({
-    type: DataType.STRING(200),
+    type: DataType.JSON,
     allowNull: true,
-    comment: '详细地址',
+    comment: '地址',
   })
-  address?: string;
+  address?: string[];
 
   // 用户令牌
   @Column({

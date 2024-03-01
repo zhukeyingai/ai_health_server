@@ -1,5 +1,5 @@
-import { Controller, Post, Body, Get, Query, Response } from '@nestjs/common';
-import { ApiTags, ApiOperation, ApiBody, ApiOkResponse } from '@nestjs/swagger';
+import { Controller, Post, Body, Get, Query } from '@nestjs/common';
+import { ApiTags, ApiOperation } from '@nestjs/swagger';
 
 import { AuthService } from './auth.service';
 import { AuthDto } from './dto/auth.dto';
@@ -11,8 +11,6 @@ export class AuthController {
 
   // 注册
   @ApiOperation({ summary: '用户注册' })
-  @ApiBody({ type: AuthDto })
-  @ApiOkResponse({ type: AuthDto })
   @Post('register')
   async register(@Body() authDto: AuthDto) {
     const response = await this.authService.register(authDto);
@@ -21,8 +19,6 @@ export class AuthController {
 
   // 登录
   @ApiOperation({ summary: '用户登录' })
-  @ApiBody({ type: AuthDto })
-  @ApiOkResponse({ type: AuthDto })
   @Post('login')
   async login(@Body() authDto: AuthDto) {
     const response = await this.authService.login(authDto);

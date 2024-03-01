@@ -1,42 +1,56 @@
 import {
+  Body,
   Controller,
   Get,
-  Post,
-  Body,
+  Query,
   Patch,
-  Param,
-  Delete,
+  Post,
+  UseInterceptors,
+  UploadedFile,
 } from '@nestjs/common';
-import { UserService } from './user.service';
-import { CreateUserDto } from './dto/create-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
+import { ApiTags, ApiOperation, ApiConsumes } from '@nestjs/swagger';
+import { FileInterceptor } from '@nestjs/platform-express';
 
+import { UserService } from './user.service';
+import { UpdatePasswordDto, UpdateUserInfoDto } from './dto/user.dto';
+
+@ApiTags('个人中心')
 @Controller('user')
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
-  @Post()
-  create(@Body() createUserDto: CreateUserDto) {
-    return this.userService.create(createUserDto);
+  // 获取用户信息
+  @ApiOperation({ summary: '获取用户信息' })
+  @Get('getUserInfo')
+  async getUserInfo(@Query() query) {
+    const { user_id } = query;
+    const response = await this.userService.getUserInfo(user_id);
+    return response;
   }
 
-  @Get()
-  findAll() {
-    return this.userService.findAll();
+  // 更新密码
+  @ApiOperation({ summary: '更新密码' })
+  @Patch('updatePassword')
+  async updatePassword(@Body() updatePasswordDto: UpdatePasswordDto) {
+    const response = await this.userService.updatePassword(updatePasswordDto);
+    return response;
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.userService.findOne(+id);
+  // 更新用户信息
+  @ApiOperation({ summary: '更新用户信息' })
+  @Patch('updateUserInfo')
+  async updateUserInfo(@Body() updateUserInfoDto: UpdateUserInfoDto) {
+    const response = await this.userService.updateUserInfo(updateUserInfoDto);
+    return response;
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
-    return this.userService.update(+id, updateUserDto);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.userService.remove(+id);
+  // 上传用户头像
+  @ApiOperation({ summary: '上传用户头像' })
+  @ApiConsumes('multipart/form-data')
+  @Post('uploadAvatar')
+  @UseInterceptors(FileInterceptor('avatar'))
+  async uploadAvatar(@UploadedFile() avatarFile: Express.Multer.File) {
+    const response = await this.userService.uploadAvatar(avatarFile);
+    return response;
   }
 }

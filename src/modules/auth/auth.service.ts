@@ -39,7 +39,7 @@ export class AuthService {
     date.setFullYear(date.getFullYear() - 18);
     user.birthday = date.toISOString().split('T')[0];
     user.age = 18; // 默认 18 岁
-    user.sex = SEX.PRIVACY; // 默认隐私
+    user.sex = SEX.FEMALE; // 默认女
     await user.save();
     return responseMessage(true, '注册成功！', REQUEST_CODE.POST_SUCCESS);
   }

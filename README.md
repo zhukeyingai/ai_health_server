@@ -85,6 +85,11 @@ nest g [文件类型] [文件名] [文件目录（src目录下）]
   - module.ts `nest g mo user`
   - service.ts `nest g s user`
 
+## 开发流程
+
+- 本地feat分支，推送至远程feat分支
+- 远程feat分支合并入master分支
+
 ## 小记
 
 - 安装 nestjs
@@ -121,3 +126,5 @@ nest g [文件类型] [文件名] [文件目录（src目录下）]
   - `pnpm install bcrypt`
 - 客户端真实IP
   - `pnpm i request-ip`
+- 文件上传
+  - `pnpm i multer @types/multer`
