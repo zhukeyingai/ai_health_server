@@ -118,6 +118,7 @@ nest g [文件类型] [文件名] [文件目录（src目录下）]
 - 安装@nestjs/sequelize
   - `pnpm i @nestjs/sequelize`
   - `pnpm i sequelize-typescript`
+  - `pnpm i sequelize`
 - 安装登录鉴权
   - `pnpm install @nestjs/passport passport-jwt passport @nestjs/jwt jsonwebtoken`
 - redis配置
@@ -128,3 +129,5 @@ nest g [文件类型] [文件名] [文件目录（src目录下）]
   - `pnpm i request-ip`
 - 文件上传
   - `pnpm i multer @types/multer`
+- 引入JSONvalue类型
+  - `pnpm i type-fest`
