@@ -6,25 +6,25 @@ import type { Sex } from '@/utils/constant/user';
 
 export class UpdatePasswordDto {
   @ApiProperty({
-    type: String,
+    type: 'string',
     description: '用户id',
   })
   user_id: string;
 
   @ApiProperty({
-    type: String,
+    type: 'string',
     description: '旧密码',
   })
   oldPassword: string;
 
   @ApiProperty({
-    type: String,
+    type: 'string',
     description: '新密码',
   })
   newPassword: string;
 
   @ApiProperty({
-    type: String,
+    type: 'string',
     description: '新密码',
   })
   repeatedPassword: string;
@@ -32,25 +32,25 @@ export class UpdatePasswordDto {
 
 export class UpdateUserInfoDto {
   @ApiProperty({
-    type: String,
+    type: 'string',
     description: '用户id',
   })
   user_id: string;
 
   @ApiProperty({
-    type: String,
+    type: 'string',
     description: '用户头像',
   })
   avatar_url?: string;
 
   @ApiProperty({
-    type: String,
+    type: 'string',
     description: '用户名称',
   })
   user_name?: string;
 
   @ApiProperty({
-    type: String,
+    type: 'string',
     enum: SEX,
     enumName: 'Sex',
     description: '性别',
@@ -60,32 +60,32 @@ export class UpdateUserInfoDto {
   sex?: Sex;
 
   @ApiProperty({
-    type: String,
+    type: 'string',
     format: 'date',
     description: '生日',
   })
   birthday?: string;
 
   @ApiProperty({
-    type: Number,
+    type: 'number',
     description: '年龄',
   })
   age?: number;
 
   @ApiProperty({
-    type: Number,
+    type: 'number',
     description: '身高',
   })
   height?: number;
 
   @ApiProperty({
-    type: Number,
+    type: 'number',
     description: '体重',
   })
   weight?: number;
 
   @ApiProperty({
-    type: String,
+    type: 'string',
     description: '职业',
   })
   job?: string;
