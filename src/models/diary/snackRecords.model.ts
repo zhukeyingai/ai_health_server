@@ -11,13 +11,13 @@ import {
 } from 'sequelize-typescript';
 import { JsonValue } from 'type-fest';
 
-import { MealTime, MealRecordAttributes } from '@/utils/constant/diary';
-import { User } from './user.model';
+import { SnackRecordAttributes } from '@/utils/constant/diary';
+import { User } from '../user.model';
 
-@Table({ tableName: 'meal_records' })
-export class MealRecords
-  extends Model<MealRecordAttributes, MealRecordAttributes>
-  implements MealRecordAttributes
+@Table({ tableName: 'snack_records' })
+export class SnackRecords
+  extends Model<SnackRecordAttributes, SnackRecordAttributes>
+  implements SnackRecordAttributes
 {
   // id
   @PrimaryKey
@@ -48,22 +48,6 @@ export class MealRecords
     comment: '日期',
   })
   date: Date;
-
-  // 餐食时间
-  @Column({
-    type: DataType.ENUM(MealTime.breakfast, MealTime.lunch, MealTime.dinner),
-    allowNull: false,
-    comment: '餐次',
-  })
-  meal_time: MealTime;
-
-  // 是否吃过
-  @Column({
-    type: DataType.BOOLEAN,
-    allowNull: false,
-    comment: '是否吃过',
-  })
-  eat: boolean;
 
   // 食物
   @Column({
