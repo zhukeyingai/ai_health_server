@@ -27,3 +27,27 @@ export type Meal = {
   mealTime: MealTime;
   foods: Food[];
 };
+
+// 用户每日饮水（model）
+export type WaterRecordAttributes = {
+  id: number;
+  user_id: string; // 用户id
+  date: Date; // 日期
+  quantity: number; // 饮水量（杯）
+} & Times;
+
+// 用户每日零食（model）
+export type SnackRecordAttributes = {
+  id: number;
+  user_id: string; // 用户id
+  date: Date; // 日期
+  foods?: JsonValue; // 食物
+} & Times;
+
+// 用户每日涌动（model）
+export type ExerciseRecordAttributes = {
+  id: number;
+  user_id: string; // 用户id
+  date: Date; // 日期
+  sports?: JsonValue; // 食物
+} & Times;
