@@ -5,7 +5,7 @@ import * as bcrypt from 'bcrypt';
 import * as jwt from 'jsonwebtoken';
 
 // import RedisConfig from '@/config/redis';
-import { User } from '@/models/user.model';
+import { User } from '@/models/user/user.model';
 // import { RedisCacheService } from '@/modules/redis-cache/redis-cache.service';
 import { SEX } from '@/utils/constant/user';
 import { REQUEST_CODE } from '@/utils/constant/request';

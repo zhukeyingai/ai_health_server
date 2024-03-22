@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { SequelizeModule } from '@nestjs/sequelize';
 
-import { User } from '@/models/user.model';
+import { User } from '@/models/user/user.model';
 import { MealRecords } from '@/models/diary/mealRecords.model';
 import { WaterRecords } from '@/models/diary/waterRecords.model';
 import { SnackRecords } from '@/models/diary/snackRecords.model';

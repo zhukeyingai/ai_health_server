@@ -9,15 +9,14 @@ import {
   PrimaryKey,
   Table,
 } from 'sequelize-typescript';
-import { JsonValue } from 'type-fest';
 
-import { ExerciseRecordAttributes } from '@/utils/constant/diary';
-import { User } from '../user/user.model';
+import { WeightAttributes } from '@/utils/constant/user';
+import { User } from './user.model';
 
-@Table({ tableName: 'exercise_records' })
-export class ExerciseRecords
-  extends Model<ExerciseRecordAttributes, ExerciseRecordAttributes>
-  implements ExerciseRecordAttributes
+@Table({ tableName: 'weight_records' })
+export class WeightRecords
+  extends Model<WeightAttributes, WeightAttributes>
+  implements WeightAttributes
 {
   // id
   @PrimaryKey
@@ -51,9 +50,9 @@ export class ExerciseRecords
 
   // 运动
   @Column({
-    type: DataType.JSON,
-    allowNull: true,
+    type: DataType.FLOAT,
+    allowNull: false,
     comment: '运动',
   })
-  sports?: JsonValue;
+  weight: number;
 }

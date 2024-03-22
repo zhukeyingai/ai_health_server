@@ -4,7 +4,7 @@ import { Request } from 'express';
 import { ExtractJwt, Strategy } from 'passport-jwt';
 
 import AppConfig from '@/config/configuration';
-import { User } from '@/models/user.model';
+import { User } from '@/models/user/user.model';
 import { RedisCacheService } from '@/modules/redis-cache/redis-cache.service';
 
 @Injectable()

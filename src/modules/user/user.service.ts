@@ -4,16 +4,20 @@ import * as bcrypt from 'bcrypt';
 import * as fs from 'fs';
 import * as path from 'path';
 
-import { User } from '@/models/user.model';
+import { User } from '@/models/user/user.model';
+import { WeightRecords } from '@/models/user/weight.model';
 import { responseMessage } from '@/utils/constant/response';
 import type { ResponseResult } from '@/utils/constant/response';
 import { UpdatePasswordDto, UpdateUserInfoDto } from './dto/user.dto';
+import { WeightRecordsDto } from './dto/weight.dto';
 
 @Injectable()
 export class UserService {
   constructor(
     @InjectModel(User)
     private userModel: typeof User,
+    @InjectModel(WeightRecords)
+    private weightRecordsModel: typeof WeightRecords,
   ) {}
 
   private readonly AVATAR_UPLOAD_DIR = path.join(
@@ -76,6 +80,7 @@ export class UserService {
     let isUpdated = false;
     Object.entries(updateFields).forEach(([key, value]) => {
       if (value && String(value) !== String(user[key])) {
+        console.log('@key', key);
         user[key] =
           key === 'address' && Array.isArray(value)
             ? JSON.stringify(value)
@@ -111,5 +116,58 @@ export class UserService {
       url: fileUrl,
     };
     return responseMessage(file, '头像已成功上传');
+  }
+
+  // 上传每日体重
+  async postDailyWeight(
+    weightRecordsDto: WeightRecordsDto,
+  ): Promise<ResponseResult> {
+    const { user_id, weight } = weightRecordsDto;
+    // 检查用户是否存在
+    const user = await this.userModel.findOne({ where: { user_id } });
+    if (!user) {
+      throw new HttpException('用户不存在', HttpStatus.NOT_FOUND);
+    }
+    const existedWeightRecord = await this.weightRecordsModel.findOne({
+      where: {
+        user_id,
+        date: new Date().toISOString().split('T')[0],
+      },
+    });
+    if (existedWeightRecord) {
+      throw new HttpException(
+        '今日体重已存在，无法再次上传',
+        HttpStatus.FORBIDDEN,
+      );
+    }
+    const currentWeightRecord = {
+      user_id,
+      date: new Date(),
+      weight,
+    };
+    user.weight = weight;
+    await this.weightRecordsModel.create(currentWeightRecord);
+    await user.save();
+    return responseMessage(true);
+  }
+
+  // 查询当日体重
+  async queryDailyWeight(user_id: string): Promise<ResponseResult> {
+    // 检查用户是否存在
+    const user = await this.userModel.findOne({ where: { user_id } });
+    if (!user) {
+      throw new HttpException('用户不存在', HttpStatus.NOT_FOUND);
+    }
+    const existedWeightRecord = await this.weightRecordsModel.findOne({
+      where: {
+        user_id,
+        date: new Date().toISOString().split('T')[0],
+      },
+    });
+    if (existedWeightRecord) {
+      return responseMessage(true);
+    } else {
+      return responseMessage(false);
+    }
   }
 }

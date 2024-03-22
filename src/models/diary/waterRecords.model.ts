@@ -11,7 +11,7 @@ import {
 } from 'sequelize-typescript';
 
 import { WaterRecordAttributes } from '@/utils/constant/diary';
-import { User } from '../user.model';
+import { User } from '../user/user.model';
 
 @Table({ tableName: 'water_records' })
 export class WaterRecords
