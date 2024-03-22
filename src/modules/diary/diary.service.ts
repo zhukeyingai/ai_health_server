@@ -40,16 +40,33 @@ export class DiaryService {
     if (!user) {
       throw new HttpException('用户不存在', HttpStatus.NOT_FOUND);
     }
-    // 遍历每餐记录并插入数据库
+    // 遍历每餐记录并插入/更新数据库
     for (const meal of meals) {
-      const mealRecord = {
-        user_id,
-        date: new Date(),
-        meal_time: meal.mealTime,
-        eat: meal.eat,
-        foods: JSON.stringify(meal.foods || []),
-      };
-      await this.mealRecordsModel.create(mealRecord);
+      const mealRecord = await this.mealRecordsModel.findOne({
+        where: {
+          user_id,
+          date: new Date().toISOString().split('T')[0],
+          meal_time: meal.mealTime,
+        },
+      });
+      if (mealRecord) {
+        const parsedFoods = JSON.parse(mealRecord.foods as string);
+        if (meal.foods) {
+          mealRecord.eat = true;
+        }
+        parsedFoods.push(...meal.foods);
+        mealRecord.foods = JSON.stringify(parsedFoods);
+        await mealRecord.save();
+      } else {
+        const newMealRecord = {
+          user_id,
+          date: new Date(),
+          meal_time: meal.mealTime,
+          eat: meal.eat,
+          foods: JSON.stringify(meal.foods || []),
+        };
+        await this.mealRecordsModel.create(newMealRecord);
+      }
     }
     return responseMessage(true, '三餐信息上传成功');
   }
@@ -75,29 +92,34 @@ export class DiaryService {
         date: { [Op.between]: [startDate, endDate] },
       },
     });
-    // 聚合相同用餐时间的foods
-    const groupedMeals: Record<string, Meal> = {};
-    mealRecords.forEach((item) => {
-      const key = `${item.date}-${item.meal_time}`;
-      if (!groupedMeals[key]) {
-        groupedMeals[key] = {
-          date: item.date,
-          mealTime: item.meal_time,
-          foods: [],
-        };
-      }
-      if (typeof item.foods === 'string') {
-        const parsedFoods = JSON.parse(item.foods);
-        groupedMeals[key].foods.push(...parsedFoods);
-      }
-    });
-    const data = Object.values(
-      Object.entries(groupedMeals)
-        .filter(([_, value]) => value.foods.length > 0)
-        .reduce((newObj, [key, value]) => ({ ...newObj, [key]: value }), {}),
-    ).map((item: Meal) => ({
-      ...item,
+    const data = mealRecords.map((item) => ({
+      date: item.date,
+      mealTime: item.meal_time,
+      foods: JSON.parse(item.foods as string),
     }));
+    // // 聚合相同用餐时间的foods
+    // const groupedMeals: Record<string, Meal> = {};
+    // mealRecords.forEach((item) => {
+    //   const key = `${item.date}-${item.meal_time}`;
+    //   if (!groupedMeals[key]) {
+    //     groupedMeals[key] = {
+    //       date: item.date,
+    //       mealTime: item.meal_time,
+    //       foods: [],
+    //     };
+    //   }
+    //   if (typeof item.foods === 'string') {
+    //     const parsedFoods = JSON.parse(item.foods);
+    //     groupedMeals[key].foods.push(...parsedFoods);
+    //   }
+    // });
+    // const data = Object.values(
+    //   Object.entries(groupedMeals)
+    //     .filter(([_, value]) => value.foods.length > 0)
+    //     .reduce((newObj, [key, value]) => ({ ...newObj, [key]: value }), {}),
+    // ).map((item: Meal) => ({
+    //   ...item,
+    // }));
     return responseMessage(data);
   }
 
