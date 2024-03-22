@@ -3,7 +3,7 @@ import { InjectModel } from '@nestjs/sequelize';
 import { Op } from 'sequelize';
 
 import { MealRecords } from '@/models/diary/mealRecords.model';
-import { User } from '@/models/user.model';
+import { User } from '@/models/user/user.model';
 import { WaterRecords } from '@/models/diary/waterRecords.model';
 import { SnackRecords } from '@/models/diary/snackRecords.model';
 import { ExerciseRecords } from '@/models/diary/exerciseRecords.model';
@@ -97,29 +97,6 @@ export class DiaryService {
       mealTime: item.meal_time,
       foods: JSON.parse(item.foods as string),
     }));
-    // // 聚合相同用餐时间的foods
-    // const groupedMeals: Record<string, Meal> = {};
-    // mealRecords.forEach((item) => {
-    //   const key = `${item.date}-${item.meal_time}`;
-    //   if (!groupedMeals[key]) {
-    //     groupedMeals[key] = {
-    //       date: item.date,
-    //       mealTime: item.meal_time,
-    //       foods: [],
-    //     };
-    //   }
-    //   if (typeof item.foods === 'string') {
-    //     const parsedFoods = JSON.parse(item.foods);
-    //     groupedMeals[key].foods.push(...parsedFoods);
-    //   }
-    // });
-    // const data = Object.values(
-    //   Object.entries(groupedMeals)
-    //     .filter(([_, value]) => value.foods.length > 0)
-    //     .reduce((newObj, [key, value]) => ({ ...newObj, [key]: value }), {}),
-    // ).map((item: Meal) => ({
-    //   ...item,
-    // }));
     return responseMessage(data);
   }
 

@@ -13,6 +13,7 @@ import { FileInterceptor } from '@nestjs/platform-express';
 
 import { UserService } from './user.service';
 import { UpdatePasswordDto, UpdateUserInfoDto } from './dto/user.dto';
+import { WeightRecordsDto } from './dto/weight.dto';
 
 @ApiTags('个人中心')
 @Controller('user')
@@ -51,6 +52,23 @@ export class UserController {
   @UseInterceptors(FileInterceptor('avatar'))
   async uploadAvatar(@UploadedFile() avatarFile: Express.Multer.File) {
     const response = await this.userService.uploadAvatar(avatarFile);
+    return response;
+  }
+
+  // 上传每日体重
+  @ApiOperation({ summary: '上传每日体重' })
+  @Post('postDailyWeight')
+  async postDailyWeight(@Body() weightRecordsDto: WeightRecordsDto) {
+    const response = await this.userService.postDailyWeight(weightRecordsDto);
+    return response;
+  }
+
+  // 查询当日体重
+  @ApiOperation({ summary: '上传每日体重' })
+  @Get('queryDailyWeight')
+  async queryDailyWeight(@Query() query) {
+    const { user_id } = query;
+    const response = await this.userService.queryDailyWeight(user_id);
     return response;
   }
 }

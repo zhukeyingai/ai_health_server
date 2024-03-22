@@ -44,7 +44,7 @@ export type SnackRecordAttributes = {
   foods?: JsonValue; // 食物
 } & Times;
 
-// 用户每日涌动（model）
+// 用户每日运动（model）
 export type ExerciseRecordAttributes = {
   id: number;
   user_id: string; // 用户id

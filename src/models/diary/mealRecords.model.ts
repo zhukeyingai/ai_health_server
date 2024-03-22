@@ -12,7 +12,7 @@ import {
 import { JsonValue } from 'type-fest';
 
 import { MealTime, MealRecordAttributes } from '@/utils/constant/diary';
-import { User } from '../user.model';
+import { User } from '../user/user.model';
 
 @Table({ tableName: 'meal_records' })
 export class MealRecords

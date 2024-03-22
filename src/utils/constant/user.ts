@@ -28,3 +28,11 @@ export type UserAttributes = {
   login_last_ip?: string; // 最后一次登录ip
   login_last_time?: Date; // 最后一次登录时间
 } & Times;
+
+// 用户每日体重（model）
+export type WeightAttributes = {
+  id: number;
+  user_id: string;
+  date: Date;
+  weight: number;
+} & Times;
