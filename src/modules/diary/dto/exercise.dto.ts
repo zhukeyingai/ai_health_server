@@ -20,7 +20,7 @@ export class ExerciseRecordsDto {
   sport: string;
 
   @ApiProperty({
-    type: 'string',
+    type: 'number',
     description: '运动时长',
   })
   amount: number;
