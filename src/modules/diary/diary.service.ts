@@ -9,7 +9,6 @@ import { SnackRecords } from '@/models/diary/snackRecords.model';
 import { ExerciseRecords } from '@/models/diary/exerciseRecords.model';
 import { responseMessage } from '@/utils/constant/response';
 import type { ResponseResult } from '@/utils/constant/response';
-import { Meal } from '@/utils/constant/diary';
 import { MealRecordsDto } from './dto/meals.dto';
 import { WaterRecordsDto } from './dto/water.dto';
 import { SnackRecordsDto } from './dto/snack.dto';
