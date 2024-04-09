@@ -9,6 +9,7 @@ import { AuthModule } from './modules/auth/auth.module';
 import { UserModule } from './modules/user/user.module';
 import { DiaryModule } from './modules/diary/diary.module';
 import { HomeModule } from './modules/home/home.module';
+import { ArticleModule } from './modules/article/article.module';
 
 import AppConfig from './config/configuration'; // 全局配置
 import DatabaseConfig from './config/database'; // 数据库配置
@@ -34,6 +35,7 @@ import RedisConfig from './config/redis'; // redis配置
     UserModule,
     DiaryModule,
     HomeModule,
+    ArticleModule,
   ],
 })
 export class AppModule {}
