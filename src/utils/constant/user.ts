@@ -36,3 +36,9 @@ export type WeightAttributes = {
   date: Date;
   weight: number;
 } & Times;
+
+export type User = {
+  avatarUrl?: string;
+  userName: string;
+  userId: string;
+};
