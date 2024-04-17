@@ -19,6 +19,7 @@ export type UserAttributes = {
   birthday: string; // 生日
   height: number; // 身高
   weight: number; // 体重
+  bmr: number; // 基础代谢率
   avatar_url?: string; // 用户头像
   sex: Sex; // 用户性别
   job?: string; // 职业
