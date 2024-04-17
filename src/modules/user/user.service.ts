@@ -10,6 +10,7 @@ import { responseMessage } from '@/utils/constant/response';
 import type { ResponseResult } from '@/utils/constant/response';
 import { UpdatePasswordDto, UpdateUserInfoDto } from './dto/user.dto';
 import { WeightRecordsDto } from './dto/weight.dto';
+import { getBMR } from '@/utils/getBMR';
 
 @Injectable()
 export class UserService {
@@ -80,7 +81,6 @@ export class UserService {
     let isUpdated = false;
     Object.entries(updateFields).forEach(([key, value]) => {
       if (value && String(value) !== String(user[key])) {
-        console.log('@key', key);
         user[key] =
           key === 'address' && Array.isArray(value)
             ? JSON.stringify(value)
@@ -88,6 +88,8 @@ export class UserService {
         isUpdated = true;
       }
     });
+    const { sex, weight, height, age } = updateFields;
+    user.bmr = getBMR(sex, weight, height, age);
     if (isUpdated) {
       await user.save();
       return responseMessage(true, '用户信息已成功更新');
@@ -146,6 +148,7 @@ export class UserService {
       weight,
     };
     user.weight = weight;
+    user.bmr = getBMR(user.sex, user.weight, user.height, user.age);
     await this.weightRecordsModel.create(currentWeightRecord);
     await user.save();
     return responseMessage(true);

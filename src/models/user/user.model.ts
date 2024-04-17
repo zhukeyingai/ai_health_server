@@ -102,6 +102,15 @@ export class User
   })
   weight: number;
 
+  // 基础代谢率
+  @Column({
+    type: DataType.FLOAT,
+    allowNull: false,
+    defaultValue: 1508,
+    comment: '基础代谢率',
+  })
+  bmr: number;
+
   // 用户头像
   @Column({
     type: DataType.STRING,
