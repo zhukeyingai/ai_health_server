@@ -7,8 +7,11 @@ import { User } from '@/models/user/user.model';
 import { WaterRecords } from '@/models/diary/waterRecords.model';
 import { SnackRecords } from '@/models/diary/snackRecords.model';
 import { ExerciseRecords } from '@/models/diary/exerciseRecords.model';
+import { Foods } from '@/models/system/foods.model';
+import { Exercise } from '@/models/system/exercise.model';
 import { responseMessage } from '@/utils/constant/response';
 import type { ResponseResult } from '@/utils/constant/response';
+import { getHeat } from '@/utils/getHeat';
 import { MealRecordsDto } from './dto/meals.dto';
 import { WaterRecordsDto } from './dto/water.dto';
 import { SnackRecordsDto } from './dto/snack.dto';
@@ -27,6 +30,10 @@ export class DiaryService {
     private snackRecordsModel: typeof SnackRecords,
     @InjectModel(ExerciseRecords)
     private exerciseRecordsModel: typeof ExerciseRecords,
+    @InjectModel(Foods)
+    private foodsModel: typeof Foods,
+    @InjectModel(Exercise)
+    private exerciseModel: typeof Exercise,
   ) {}
 
   // 创建三餐信息
@@ -48,12 +55,26 @@ export class DiaryService {
           meal_time: meal.mealTime,
         },
       });
+      const mealHeat = await Promise.all(
+        meal.foods?.map(async ({ foodName, amount }) => {
+          const food = await this.foodsModel.findOne({
+            where: {
+              name: foodName,
+            },
+          });
+          return {
+            foodName,
+            amount,
+            heat: getHeat(food ? food.heat : 200, amount),
+          };
+        }),
+      );
       if (mealRecord) {
         const parsedFoods = JSON.parse(mealRecord.foods as string);
         if (meal.foods) {
           mealRecord.eat = true;
         }
-        parsedFoods.push(...meal.foods);
+        parsedFoods.push(...mealHeat);
         mealRecord.foods = JSON.stringify(parsedFoods);
         await mealRecord.save();
       } else {
@@ -62,7 +83,7 @@ export class DiaryService {
           date: new Date(),
           meal_time: meal.mealTime,
           eat: meal.eat,
-          foods: JSON.stringify(meal.foods || []),
+          foods: JSON.stringify(mealHeat || []),
         };
         await this.mealRecordsModel.create(newMealRecord);
       }
@@ -162,10 +183,24 @@ export class DiaryService {
       },
     });
     let snackRecordsToSave;
+    const mealHeat = await Promise.all(
+      foods?.map(async ({ foodName, amount }) => {
+        const food = await this.foodsModel.findOne({
+          where: {
+            name: foodName,
+          },
+        });
+        return {
+          foodName,
+          amount,
+          heat: getHeat(food ? food.heat : 200, amount),
+        };
+      }),
+    );
     if (snackRecords) {
       if (typeof snackRecords.foods === 'string') {
         const prevFoods = JSON.parse(snackRecords.foods);
-        const curFoods = [...prevFoods, ...foods];
+        const curFoods = [...prevFoods, ...mealHeat];
         snackRecordsToSave = {
           ...snackRecords,
           foods: JSON.stringify(curFoods),
@@ -180,7 +215,7 @@ export class DiaryService {
       snackRecordsToSave = {
         user_id,
         date: new Date(),
-        foods: JSON.stringify(foods || []),
+        foods: JSON.stringify(mealHeat || []),
       };
       await this.snackRecordsModel.create(snackRecordsToSave);
     }
@@ -235,14 +270,28 @@ export class DiaryService {
         date: new Date().toISOString().split('T')[0],
       },
     });
+    const heat = await this.exerciseModel.findOne({
+      where: {
+        name: sport,
+      },
+    });
     if (exerciseRecords) {
       if (typeof exerciseRecords.sports === 'string') {
         const parsedSports = JSON.parse(exerciseRecords.sports);
         const existedTypeIndex = parsedSports.findIndex((i) => i.type === type);
         if (existedTypeIndex !== -1) {
-          parsedSports[existedTypeIndex].sports.push({ sport, amount });
+          parsedSports[existedTypeIndex].sports.push({
+            sport,
+            amount,
+            heat: getHeat(heat ? heat.heat : 400, amount),
+          });
         } else {
-          parsedSports.push({ type, sports: [{ sport, amount }] });
+          parsedSports.push({
+            type,
+            sports: [
+              { sport, amount, heat: getHeat(heat ? heat.heat : 400, amount) },
+            ],
+          });
         }
         exerciseRecords.sports = JSON.stringify(parsedSports);
         await exerciseRecords.save();
@@ -253,7 +302,14 @@ export class DiaryService {
       const newRecordData = {
         user_id,
         date: new Date(),
-        sports: JSON.stringify([{ type, sports: [{ sport, amount }] }]),
+        sports: JSON.stringify([
+          {
+            type,
+            sports: [
+              { sport, amount, heat: getHeat(heat ? heat.heat : 400, amount) },
+            ],
+          },
+        ]),
       };
       await this.exerciseRecordsModel.create(newRecordData);
     }

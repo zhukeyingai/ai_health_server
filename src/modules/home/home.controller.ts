@@ -17,4 +17,22 @@ export class HomeController {
       await this.homeService.queryWeightAllDays(eChartRequestDto);
     return response;
   }
+
+  // 查询摄入热量
+  @ApiOperation({ summary: '查询摄入热量' })
+  @Get('queryHeatIntake')
+  async queryHeatIntake(@Query() query) {
+    const { user_id } = query;
+    const response = await this.homeService.queryHeatIntake(user_id);
+    return response;
+  }
+
+  // 查询消耗热量
+  @ApiOperation({ summary: '查询消耗热量' })
+  @Get('queryHeatConsume')
+  async queryHeatConsume(@Query() query) {
+    const { user_id } = query;
+    const response = await this.homeService.queryHeatConsume(user_id);
+    return response;
+  }
 }
