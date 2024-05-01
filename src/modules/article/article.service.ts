@@ -1,5 +1,6 @@
 import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
+import { Op, literal } from 'sequelize';
 
 import { User } from '@/models/user/user.model';
 import { Articles } from '@/models/article/articles.model';
@@ -11,7 +12,6 @@ import {
   QueryArticleRequestDto,
   UpdateArticleRequestDto,
 } from './dto/articles.dto';
-import { Op, literal } from 'sequelize';
 
 @Injectable()
 export class ArticleService {
@@ -43,6 +43,11 @@ export class ArticleService {
       content,
     });
     return responseMessage(true, '创建成功');
+  }
+
+  // 查询全部文章（推荐）
+  async queryAllArticles(): Promise<ResponseResult> {
+    return responseMessage(true);
   }
 
   // 查询文章
