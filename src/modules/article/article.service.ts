@@ -46,8 +46,34 @@ export class ArticleService {
   }
 
   // 查询全部文章（推荐）
-  async queryAllArticles(): Promise<ResponseResult> {
-    return responseMessage(true);
+  async queryRandomArticles(): Promise<any> {
+    try {
+      // 统计文章总数
+      const totalArticles = await this.articlesModel.count();
+
+      if (totalArticles < 9) {
+        throw new HttpException('文章数量不足', HttpStatus.BAD_REQUEST);
+      }
+
+      // 随机获取9篇文章
+      // 这里使用一个技巧，生成一个随机的偏移量来选择文章
+      const randomOffset = Math.floor(Math.random() * (totalArticles - 9));
+      const randomArticles = await this.articlesModel.findAll({
+        limit: 9,
+        offset: randomOffset,
+        order: [literal('RAND()')], // 使用RAND()函数实现随机排序，注意这在MySQL中有效，其他数据库可能需要不同的方法
+      });
+
+      return responseMessage(randomArticles);
+    } catch (error) {
+      if (error instanceof HttpException) {
+        throw error;
+      }
+      throw new HttpException(
+        '获取随机文章时出错',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
   }
 
   // 查询文章

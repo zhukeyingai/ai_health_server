@@ -21,6 +21,14 @@ export class ArticleController {
     return response;
   }
 
+  // 查询全部文章（推荐）
+  @ApiOperation({ summary: '查询全部文章（推荐）' })
+  @Get('queryRandomArticles')
+  async queryRandomArticles() {
+    const response = await this.articleService.queryRandomArticles();
+    return response;
+  }
+
   // 查询文章
   @ApiOperation({ summary: '查询文章' })
   @Get('queryArticles')
