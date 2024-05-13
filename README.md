@@ -131,3 +131,5 @@ nest g [文件类型] [文件名] [文件目录（src目录下）]
   - `pnpm i multer @types/multer`
 - 引入JSONvalue类型
   - `pnpm i type-fest`
+
+[langchain](https://js.langchain.com/docs/get_started/quickstart)
